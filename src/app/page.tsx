@@ -2,6 +2,7 @@
 import { useState } from "react";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +15,9 @@ export default function LoginPage() {
          'radial-gradient( circle farthest-corner at 10% 20%,  rgba(29,48,59,1) 56.2%, rgba(54,109,155,1) 90% )'
       }}
     >
+       <div className="mb-18">
+        <ArrowBackIosIcon/>
+      </div>
       <h1 className="text-2xl font-bold mb-6">Login</h1>
       <form className="flex flex-col gap-4">
         <input
@@ -51,7 +55,7 @@ export default function LoginPage() {
       </form>
       <p className="text-center mt-4">
         No account?{" "}
-        <a href="/register" className="text-blue-400 underline">Register here</a>
+        <a href="/register" className="text-yellow-100 underline">Register here</a>
       </p>
     </div>
   );
