@@ -82,21 +82,27 @@ export default function Profile() {
     const formData = new FormData(form);
     let values = Object.fromEntries(formData.entries());
 
-    values = {
-        ...values,
-        selectedPhoto: selectedPhoto || null
-    };
-
-    console.log(values); // logs all form field values
-
     setProfile(prev => ({
         ...prev,
+        username: values.displayName || prev.username,
+        gender: values.gender || prev.gender,
         backgroundImage: selectedPhoto || prev.backgroundImage,
+        about: {
+        ...prev.about,
+        birthday: values.birthday || prev.about.birthday,
+        horoscope: values.horoscope || prev.about.horoscope,
+        zodiac: values.zodiac || prev.about.zodiac,
+        height: values.height || prev.about.height,
+        weight: values.weight || prev.about.weight,
+        },
     }));
+
+    console.log(values);
     setIsEdit(false);
     }
 
-  const handleEditInterest = () => {
+    const handleEditInterest = () => {
+    setTempChips([...profile.interests]);
     setIsEditInterest(true);
     };
 
@@ -112,8 +118,13 @@ export default function Profile() {
         setTempChips(tempChips.filter((chip) => chip !== chipToDelete));
     };
 
-    const handleLogInterestInput = () => {
+    const handleSaveInterests = () => {
         console.log("Current interest input:", tempChips);
+        setProfile((prev) => ({
+            ...prev,
+            interests: tempChips
+        }));
+        setIsEditInterest(false);
     };
 
   return (
@@ -124,9 +135,7 @@ export default function Profile() {
                     <a href="/">
                         <ArrowBackIosIcon />
                     </a>
-                        {profile.username && (
-                            <span>@{profile.username}</span>
-                        )}
+                        <span>@{profile.username}</span>
                     <MoreHorizIcon />
                 </div>
                 </>
@@ -139,7 +148,7 @@ export default function Profile() {
                     <button
                         type="button"
                         className="text-blue-400 text-sm"
-                        onClick={handleLogInterestInput}
+                        onClick={handleSaveInterests}
                     >
                         Save
                     </button>
@@ -355,7 +364,6 @@ export default function Profile() {
             </div>
         </>
         )}
-
     </div>
   );
 }
