@@ -41,7 +41,8 @@ export default function LoginPage() {
             {showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
           </button>
         </div>
-
+        {/* this is a protected route! */}
+        {/* href="/profile" */}
         <button
           type="submit"
           className="bg-blue-600 p-3 rounded-md"
