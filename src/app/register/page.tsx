@@ -76,7 +76,7 @@ export default function RegisterPage() {
       </form>
       <p className="text-center mt-4">
         Have an account?{" "}
-        <a href="/register" className="text-yellow-100 underline">Login here</a>
+        <a href="/" className="text-yellow-100 underline">Login here</a>
       </p>
     </div>
   );
