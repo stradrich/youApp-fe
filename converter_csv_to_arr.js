@@ -5,26 +5,17 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-function csvToArray(csvText, delimiter = ',') {
+function csvToArray(csvText) {
   const lines = csvText.trim().split('\n');
-  const headers = lines[0].split(delimiter).map(h => h.trim().replace(/\r/g, ''));
-
+  const headers = lines[0].split(',');
   return lines.slice(1).map(line => {
-    const values = line.split(delimiter).map(v => v.trim().replace(/\r/g, ''));
+    const values = line.split(',');
     return headers.reduce((obj, header, i) => {
-      let value = values[i] || '';
-
-      // Remove quotes if any
-      value = value.replace(/^"(.*)"$/, '$1');
-
-      // Convert to number if applicable
-      obj[header] = isNaN(value) ? value : Number(value);
-
+      obj[header] = values[i];
       return obj;
     }, {});
   });
 }
-
 
 function writeJsFile(filename, variableName, data) {
   const content = `export const ${variableName} = ${JSON.stringify(data, null, 2)};\n`;

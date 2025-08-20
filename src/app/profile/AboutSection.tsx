@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 export default function AboutSection({
     aboutRef,
     about,
-    age,
+    // age,
     isEdit,
     onEditToggle,
     onSave,
@@ -15,6 +15,49 @@ export default function AboutSection({
     handlePhotoClick,
     handleFileChange,
     }) {
+
+    // async function handleSaveUpdate() {
+    //     if (!aboutRef.current) return;
+
+    //     const form = aboutRef.current.querySelector("form");
+    //     const formData = new FormData(form);
+    //     const values = Object.fromEntries(formData.entries());
+
+    //     const updatedProfile = {
+    //         username: values.displayName || profile.username,
+    //         age: values.age || "", // backend can calculate
+    //         gender: values.gender || profile.gender,
+    //         interests: profile.interests,
+    //         backgroundImage: selectedPhoto || profile.backgroundImage,
+    //         birthday: values.birthday ? new Date(values.birthday).toISOString() : profile.about?.birthday,
+    //         horoscope: profile.about?.horoscope || "", // backend can calculate
+    //         zodiac: profile.about?.zodiac || "", // backend can calculate
+    //         height: values.height || profile.about?.height,
+    //         weight: values.weight || profile.about?.weight,
+    //     };
+
+    //     try {
+    //         const res = await fetch(`http://localhost:3005/profile/${profile._id}`, {
+    //             method: "PATCH",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify(updatedProfile),
+    //         });
+
+    //         if (!res.ok) throw new Error("Failed to update profile");
+
+    //         const data = await res.json();
+    //         console.log("Profile updated:", data);
+
+    //         // update local state
+    //         setProfile(data);
+    //         setSelectedPhoto(null);
+    //         setIsEdit(false);
+    //     } catch (err) {
+    //         console.error(err);
+    //         alert("Profile update failed");
+    //     }
+    // }
+
     return (
         <>
         {!isEdit ? (
@@ -27,11 +70,16 @@ export default function AboutSection({
                 </button>
                 </div>
                 <div className="flex flex-col gap-2 text-sm">
-                <p>Birthday: {about.birthday} (Age {age})</p>
-                <p>Horoscope: {about.horoscope.replace(/^[^\w]*|\s*\(.*\)$/g, '').trim()}</p>
-                <p>Zodiac: {about.zodiac}</p>
-                <p>Height: {about.height}</p>
-                <p>Weight: {about.weight}</p>
+                <p className="flex">Birthday: {about.birthday ? new Date(about.birthday).toISOString().split('T')[0] : ""}
+                             <div className="mx-2">
+                                (Age {about.age})
+                            </div>
+                             {/* (Age {age}) */}
+                </p>
+                <p>Horoscope: {about?.horoscope?.replace(/^[^\w]*|\s*\(.*\)$/g, '').trim()}</p>
+                <p>Zodiac: {about?.zodiac}</p>
+                <p>Height: {about?.height}</p>
+                <p>Weight: {about?.weight}</p>
                 </div>
             </div>
             ) : (
@@ -88,7 +136,7 @@ export default function AboutSection({
                         name={field.name}
                         id={field.name}
                         className="flex-1 bg-white/20 p-2 rounded-md text-white"
-                        defaultValue={about[field.name] || ''}
+                        defaultValue={about?.[field?.name] || ''}
                     >
                         <option value="" disabled>
                         Select {field.label}
@@ -106,7 +154,7 @@ export default function AboutSection({
                         id={field.name}
                         placeholder={field.placeholder}
                         className="flex-1 bg-white/20 p-2 rounded-md"
-                        defaultValue={about[field.name] || ""}
+                        defaultValue={about?.[field?.name] || ""}
                     />
                     )}
                 </div>

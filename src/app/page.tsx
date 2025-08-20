@@ -3,9 +3,45 @@ import { useState } from "react";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  
+  const router = useRouter();
+
+  const handleLogin = async (event: React.FormEvent) => {
+    // console.log('clicked');
+    event.preventDefault();
+    setError("");
+
+    try {
+      const respond = await fetch("http://localhost:3005/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, password}),
+      })
+
+      const data = await respond.json();
+
+      if (respond.ok) {
+        console.log("Login successful:", data);
+        // localStorage.setItem("userId", data.userId);
+        // localStorage.setItem("username", data.username);
+        router.push(`/profile/${data.userId}`);
+      } else {
+        setError(data.message || "Login failed");
+      }
+      
+    } catch (error) {
+       console.error(error);
+       setError("Something went wrong");
+    }
+    
+  } 
 
   return (
     <div 
@@ -19,12 +55,14 @@ export default function LoginPage() {
         <ArrowBackIosIcon/>
       </div>
       <h1 className="text-2xl font-bold mb-6">Login</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Enter Username/Email"
           inputMode="email"
           className="bg-white/20 p-3 rounded-md"
+          value={identifier}
+          onChange={(event) => setIdentifier(event.target.value)}
         />
 
         <div className="relative">
@@ -32,6 +70,8 @@ export default function LoginPage() {
             type={showPassword ? "text" : "password"}
             placeholder="Enter Password"
             className="bg-white/20 p-3 rounded-md w-full pr-10"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <button
             type="button"
@@ -41,8 +81,6 @@ export default function LoginPage() {
             {showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
           </button>
         </div>
-        {/* this is a protected route! */}
-        {/* href="/profile" */}
         <button
           type="submit"
           className="bg-blue-600 p-3 rounded-md"
